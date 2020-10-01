@@ -1,0 +1,176 @@
+<!DOCTYPE html>   <!-- doc type declaration for HTML5 -->
+<html>  <!-- opening HTML tag -->
+<head>	<!-- opening head tag -->
+
+	<title>Web Application Development Project 2020 Submitted by G00273895</title>   <!-- title tag -->
+	<!-- I have added CSS style attributes for various CSS classes beteen the opening & closing style tags below, all comments for CSS styles added here as they caused issues when added inside style tags-->
+	<!-- CSS style added for the body of the document in a class called body -->
+	<!-- CSS style added for header bar at the top of the document containing the buttons linking to each internal webpage in a class called headerbar  -->
+	<!-- I added a CSS class for adding style to the buttons linking to internal webpages in a class called button-->
+	<!-- I read about adding CSS styles to buttons here: https://www.w3schools.com/css/css3_buttons.asp -->
+	<!-- I have added a class for styling the page heading called headings -->
+	<!-- CSS style added for the paragraphs-->
+	<!-- CSS style added for the div containing the quiz on the homepage -->
+	<!-- some properties include - text-align to center text in the box, margin to set size of margin around the box -->
+	<!-- border style, color and width have been set and padding which is the space left between text and margin -->
+	<!-- border color picked by launching the webpage and picking a color through inspecter as per lecture example -->
+
+	<!-- opening style tag -->
+	<style type = "text/css"> 
+	.body {
+		background-color: #9e9e9ebd;
+	}
+	
+	.headerbar {
+		position: relative;
+		background-color: #9e9e9ebd;
+		text-align: center;
+		margin: 10px;
+		padding: 20px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.button {
+		width: 250px;
+		font-size: 30px;
+		font-family: Calibri;
+		font-weight: bold;
+		text-align: center;
+		padding: 5px;
+		background-color: white;
+		color: black;
+		border: 2px solid #4CAF50;
+	}
+	
+	.headings {
+		text-align: center;
+		margin: 10px;
+		color: white;
+		background-color: #2200ffb3;
+		font-family: Calibri;
+		font-size: 40px;
+		padding: 30px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.paragraphs{
+		text-align: center;
+		margin: 10px;
+		background-color: #aeff0066;
+		color: black;
+		font-family: Calibri;
+		font-weight: bold;
+		font-size: 25px;
+		padding: 30px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.quiz {
+		text-align: center;
+		margin: 10px;
+		color: black;
+		background-color: white;
+		font-family: Calibri;
+		font-weight: bold;
+		padding: 40px;
+		border-style: dashed;
+		border-color: orange;
+		border-width: 5px;
+		font-size: 22px;
+	}
+	</style> <!-- closing style tag-->
+</head>		<!-- closing head tag -->
+
+<body class="body">	<!-- opening body tag with a CSS class applied -->
+
+<!-- I have added a div inside of which I have created buttons to link to the internal pages of this website -->
+<!-- I read about creating a button to link to webpages here: https://www.w3docs.com/snippets/html/how-to-create-an-html-button-that-acts-like-a-link.html -->
+<div class="headerbar"> <!-- CSS style inside the opening div tag -->
+<button class="button" onclick= "window.location.href= 'Births.html';">2019 Calf Births</button> <!-- Link to 2019 Calf births page  -->
+<button class="button" onclick= "window.location.href= '2018Births.html';">2018 Calf Births</button> <!-- Link to 2018 Calf births page  -->
+<button class="button" onclick= "window.location.href= 'UsefulLinks.html';">Useful Links</button> <!-- Link to Useful Links page -->
+<!-- I applied the CSS style button class here to the buttons -->
+</div>
+
+<!-- heading 1 has been created containing the name of the webpage and assigned a CSS class -->
+<h1 class="headings">Suckler Farming Ireland</h1> 
+
+<!-- heading 2 has been created containing information about the purpose of this webpage and assigned a CSS class -->
+<h2 class="paragraphs">Welcome to Suckler Farming Ireland which is a website that provides users with the most up to date information pertaining to Suckler farming in Ireland today.</h2>
+
+<!-- I have added a div containing my own images -->
+<!-- image added using the img tag, width and height specified in pixels-->
+<!-- alt text will be displayed when there is a problem displaying the image-->
+<div class="headings">
+<img src= "Images/Image1.JPG" align="center" width="300" height="200" alt= "Cow & Calf" title= "Cow & Calf">
+<img src= "Images/Image2.JPG" align="center" width="300" height="200" alt= "Red cow & Calf" title= "Red cow & Calf">
+<img src= "Images/Image3.JPG" align="center" width="300" height="200" alt= "Black & white cow" title= "Black & white cow">
+<img src= "Images/Image4.Jpeg" align="center" width="300" height="200" alt= "Bull" title= "Bull">
+</div>
+
+<!-- I have added a div containing a quiz question with 2 buttons which have onclick events that call JavaScript functions -->
+<!-- The purpose of this quiz is to have the user access and change HTML on the webpage through the DOOM through an onclick event  -->
+<!-- I have applied an id to the div in order for the JavaScript function to access the div through the DOM query -->
+<div id="text" class ="quiz">Test Your Knowledge
+<br>
+<br>
+True or False: Ireland is the largest exporter of beef in the European Union
+<br>
+<br>
+<button class="button" onclick="changeText1()">True</button> <!-- function called on click event -->
+<button class="button" onclick="changeText2()">False</button>
+</div>
+
+<!-- In the last section of the homepage I am asking the user to give me feedback on the website -->
+<!-- I am demonstrating the use of events by using a button event which calls a function when clicked-->
+<!-- The function that is called selects this section of the webpage throught the DOM and changes text and background colors -->
+<!-- I have also added a pop up alert thanking the customer for giving their feedback -->
+<div class ="paragraphs" id="styling">We would appreciate if you could take a moment to give us your feedback on our website by clicking the appropriate button below:
+<br>
+<br>
+<!-- button created with an on click event that will update the color of text and background color -->
+<button class="button" onclick="changegood()">This website is helpful</button>
+<button class="button" onclick="changebad()">This website is not helpful</button>
+</div>
+</body> <!-- closing body tag -->
+</html> <!-- closing HTML tag -->
+
+<script> // opening script tag for JavaScript code
+// functions added for the on click events that will occur when the buttons are clicked in the quiz
+// I have added 2 functions to access and change HTML on the webpage through the DOM depending on the button the user clicks
+function changeText1(){
+	document.getElementById("text").innerHTML = "Congratulations your answer is correct";
+	document.getElementById("text").style.color ="green";
+	}
+function changeText2(){
+	document.getElementById("text").innerHTML = "Incorrect answer";
+	document.getElementById("text").style.color ="red";
+	}
+
+// functions to be called in the feedback section on click events
+// I have added 2 functions to access and change styling through the DOM
+// I have created a variable called par which has been set equal to the div "styling"
+// I can call the variable inside my JavaScript functions when updating the styling
+var par = document.getElementById("styling");
+
+// function created to turn text green if user found the website helpful
+function changegood(){
+	par.style.background = "orange";
+	par.style.color = "green";
+	par.style.border = "5px dashed white";
+	alert("Thank you for your feedback we are glad you found the website helpful");
+}
+// function created to turn text red if user didnt find the website helpful
+function changebad(){
+	par.style.background = "black";
+	par.style.color = "red";
+	par.style.border = "5px dashed white";
+	alert("We are sorry the website was not helpful, please feel free to send us any comments or suggestions by email");
+}
+</script> <!-- closing JavaScript tag -->

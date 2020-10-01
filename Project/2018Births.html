@@ -1,0 +1,202 @@
+<!DOCTYPE html> <!-- doc type declaration for HTML5 -->
+<html lang="en"> <!-- opening html tag -->
+<head> <!-- opening head tag -->
+	<meta charset="UTF-8">
+	<title>Web Application Development Project 2020- G00273895 John Dunne</title>
+	<!-- CSS styles added inside the style tags below -->
+	<!-- I have added a CSS style where the rectangles turn orange when the mouse hovers over them -->
+	<!-- I have copied over the same CSS syles as used in my Homepage -->
+	<!-- opening style tag -->
+	<style>
+	rect:hover {fill: orange;}
+	
+	.body {
+		background-color: #9e9e9ebd;
+	}
+	
+	.headings {
+		text-align: center;
+		margin: 10px;
+		color: white;
+		background-color: #2200ffb3;
+		font-family: Calibri;
+		font-size: 40px;
+		padding: 30px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.paragraphs{
+		text-align: center;
+		margin: 10px;
+		background-color: #aeff0066;
+		color: black;
+		font-family: Calibri;
+		font-weight: bold;
+		font-size: 25px;
+		padding: 30px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.headerbar {
+		position: relative;
+		background-color: #9e9e9ebd;
+		text-align: center;
+		margin: 10px;
+		padding: 20px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.button {
+		width: 250px;
+		font-size: 30px;
+		font-family: Arial;
+		font-weight: bold;
+		text-align: center;
+		padding: 5px;
+		background-color: white;
+		color: black;
+		border: 2px solid #4CAF50;
+	}
+	</style> <!-- closing style tag -->
+	
+	<!-- Must provide the link here to the latest version of D3 -->
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+</head> <!-- closing head tag -->
+
+<body class="body"> <!-- opening body tag with CSS style applied -->
+	<!-- I have added a div inside of which I have created buttons to link to the internal pages of this website -->
+	<!-- I read about creating a button to link to webpages here: https://www.w3docs.com/snippets/html/how-to-create-an-html-button-that-acts-like-a-link.html -->
+	<div class="headerbar"> <!-- CSS style div class applied here -->
+		<button class="button" onclick= "window.location.href= 'Homepage.html';">Home</button> <!-- Link to Homepage  -->
+		<button class="button" onclick= "window.location.href= 'Births.html';">2019 Calf Births</button> <!-- Link to 2019 Calf births page  -->
+		<button class="button" onclick= "window.location.href= 'UsefulLinks.html';">Useful Links</button> <!-- Link to Useful Links page -->
+		<!-- I applied the CSS style button class here to the buttons -->
+	</div>
+	
+	<!-- Page heading added with same CSS style applied as homepage-->
+	<h1 class = "headings">2018 Calf births of beef breed by month in Ireland</h1>
+	
+	<!-- Div added with same CSS style applied as homepage and my own text added -->
+	<div class="paragraphs"> I have included below a bar chart showing the number of calf births ('000s) registered in Ireland during 2018 where the sire of the calf was a beef breed. The numbers are available to view on the Department of Agriculture, Food and the Marine website at the following link: <a href="https://www.agriculture.gov.ie/animalhealthwelfare/animalidentificationmovement/cattle/bovinebirthandmovementsmonthlyreports/"target="_blank">Bovine Birth and Movements Monthly Reports</a>. There are also some other useful and interesting statistics at this link which I recommend for those interested in finding out more.
+	<br> <!-- break on to new line -->
+	<br>
+	You have some display options below for chart color and chart size, please select your options and create chart.
+	</div>
+	<br>
+	<!-- Drop down list added with 3 options, the options will be selected by the DOM and used as values to be passed in as height of rectangles -->
+	<!-- id has been added in order to allow the DOM select the values chosen -->
+	<select id="chartHeight">
+		<option value="300">300 Pixels</option>
+		<option value="500">500 Pixels</option>
+		<option value="800">800 Pixels</option>
+	</select>
+	
+	<!-- user will be asked to choose a color which will be used in the chart  -->
+	<!-- input type color give a color chart which the user can access and choose a color which will be selected by the DOM -->
+	<!-- id added to allow DOM selection -->
+	Choose Chart Color: <input type = "color" id="chooseColor">
+	
+	<!-- Button added which will call the create chart function and the chart will be drawn -->
+	<button onclick="createChart()">Create Chart</button>
+
+	<!-- I have created a div to which I will append an SVG container -->
+	<div id="myDiv"></div>
+	
+</body> <!-- closing body tag -->
+</html> <!-- closing html tag -->
+
+<!-- JavaScript code below -->
+<script>
+// All my JavaScript code is contained inside the opening and closing curly braces of this function
+// The function will be called on an onclick event when the user clicks the Create Chart button on the webpage
+function createChart() {
+// I have entered the values for calf births 2018 in an array
+	var myArray = [97, 250, 365, 302, 179, 92, 58, 49, 47, 45, 39, 29];
+	// d3.max is a method used to find the largest value in an array, will be used as input to the domain when creating a scale
+	var maxValue = d3.max(myArray);
+	// alert to output the maxvalue variable to check it works good
+	//alert(maxValue);
+	// height variable created and set equal to the option selected by the user for chart height, will be used as input to height attribute 
+	var height = document.getElementById("chartHeight").value;
+	// chooseColor variable created and set equal to the color selected by the user, will be user as input to fill attribute
+	var chooseColor = document.getElementById("chooseColor").value;
+	// I have created a variable for width and set it to 600 pixels, each rectangle is 40 pixels wide plus a 10 pixel gap between rectangles 
+	var width = 600;
+	
+	// Charts previously appended to the SVG will be removed before the code runs to append the new new chart to the SVG
+	// Without this line the previously drawn chart would remain on the page even when a new chart is drawn by the user
+	d3.select("#myDiv").selectAll("*").remove();
+	
+	// SVG container created that appends an svg to the div in the HTML code with the size of 1000 pixels by 1000 pixels
+	var svgContainer = d3.select("#myDiv").append("svg")
+		.attr("width", 1000)
+		.attr("height", 1000);
+	
+	// Created a Y scale using the max value in the array as domain and height variable as input to the range
+	// height variable is the first value in the range input as I want the rectangles to start at this point and travel up the page
+	var yScale = d3.scaleLinear()
+		.domain([0, maxValue])
+		.range([height,0]);
+		
+	// I have created an X scale and specified the labels in the domain and the range is set to the width variable 
+	var xScale = d3.scaleBand()
+		.domain(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"])
+		.range([0, width]);
+		
+	// Create a Y axis using yScale as its scale
+	var yAxis = d3.axisLeft()
+		.scale(yScale)
+		
+	// I have created an X axis using the X scale created above as scale
+	var xAxis = d3.axisBottom()
+		.scale(xScale);
+		
+	//	selectAll used to create an association with the data contained in the array
+	var myRectangle = svgContainer.selectAll("rect")
+		.data(myArray);
+		
+	// d3 enter method acts like a loop looping through each array element and creating the rectangles for each value
+	// The X and Y attributes have been set to determine the position of the rectangles 
+	// The first rectangle will start 50 pixels from the left and each rectangle thereafter will also be 50 pixels farther left
+	// The Y attribute has been set to the yScale value for each element in the array, therefore each value will be scaled to suit the size of the chart
+	// The width of each rectangle is set to 40 pixels, which allows 10 pixels space between each rectangle
+	// I have used baseline correction to have the rectangles starting at the user specified height variable and the height of each rectangle has been subtracted to have the bars moving back up the page by that value, modified to fit the Y scale 
+	// The fill will be set to the color the user picks in the color chart 
+	myRectangle.enter()
+		.append("rect")
+		.attr("x", function(d, i) 
+			{return 50 + (i*50);
+		})
+		.attr("y", function(d) {
+			return yScale(d);
+		})
+		.attr("width", 40)
+		.attr("height", function(d) 
+			{return height - yScale(d);
+		})
+		.attr("fill", chooseColor);
+			
+	// I have appended the y axis to the svg container 		
+	svgContainer.append("g")
+		.attr("transform", "translate(45,0)")
+		.call(yAxis);
+		
+	// I have appended the x axis to the svg container and I have added some text attributes as per example shown in lectures 	
+	// The text will be rotated at a 45 degree angle and positioned as per the x and y attributes and font will be bold
+	svgContainer.append("g")
+		.attr("transform", "translate (50," + height + ")")
+		.call(xAxis)
+		.selectAll("text")
+		.attr("transform", "rotate(45)")
+		.attr("text-anchor", "start")
+		.attr("font-weight", "bold")
+		.attr("x", "9")
+		.attr("y", "3");
+}		
+</script> <!-- closing Script tag -->

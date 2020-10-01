@@ -1,0 +1,211 @@
+<!DOCTYPE html>  <!-- doc type declaration for HTML5 -->
+<html lang="en"> <!-- opening html tag-->
+<head>		<!-- opening head tag-->
+	<!-- Title of document-->
+	<title>Web Application Development Project 2020 - G00273895 John Dunne</title>
+	<meta charset="UTF-8">
+	<!-- CSS styles added inside the style tags below -->
+	<!-- I have added a CSS style where the colors of the rectangles will change when mouse hovers over them-->
+	<!-- I have also copied over the CSS styles from the Homepage -->
+	<style>		
+	rect:hover {fill: yellow;}
+	
+	.body {
+		background-color: #9e9e9ebd;
+	}
+	
+	.headings {
+		text-align: center;
+		margin: 10px;
+		color: white;
+		background-color: #2200ffb3;
+		font-family: Calibri;
+		font-size: 40px;
+		padding: 30px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.paragraphs{
+		text-align: center;
+		margin: 10px;
+		background-color: #aeff0066;
+		color: black;
+		font-family: Calibri;
+		font-weight: bold;
+		font-size: 25px;
+		padding: 30px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.headerbar {
+		position: relative;
+		background-color: #9e9e9ebd;
+		text-align: center;
+		margin: 10px;
+		padding: 20px;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+	}
+	
+	.button {
+		width: 250px;
+		font-size: 30px;
+		font-family: Arial;
+		font-weight: bold;
+		text-align: center;
+		padding: 5px;
+		background-color: white;
+		color: black;
+		border: 2px solid #4CAF50;
+	}
+	</style> <!-- closing style tag -->
+	
+	<!-- Script tags containing the D3 link which is necessary for D3 to run -->
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	
+</head> 	<!-- closing head tag -->
+
+<body class="body"> <!-- opening body tag -->
+	<div class="headerbar"> <!-- CSS style div class applied here -->
+	<!-- I have added in the buttons linking to the other web pages using same CSS styles as homepage -->
+	<button class="button" onclick= "window.location.href= 'Homepage.html';">Homepage</button> <!-- Link to Homepage -->
+	<button class="button" onclick= "window.location.href= '2018Births.html';">2018 Calf Births</button> <!-- Link to 2018 Calf births page  -->
+	<button class="button" onclick= "window.location.href= 'UsefulLinks.html';">Useful Links</button> <!-- Link to Useful Links page -->
+	</div>
+
+	<!-- Page heading added with same CSS style applied as homepage-->
+	<h1 class ="headings">2019 Calf births of beef breed by month in Ireland</h1>
+	
+	<!-- Paragraph added with same CSS style applied as homepage-->
+	<h2 class="paragraphs"> I have included below a bar chart showing the number of calf births ('000s) registered in Ireland during 2019 where the sire of the calf was a beef breed. The numbers are available to view on the Department of Agriculture, Food and the Marine website at the following link: <a href="https://www.agriculture.gov.ie/animalhealthwelfare/animalidentificationmovement/cattle/bovinebirthandmovementsmonthlyreports/"target="_blank">Bovine Birth and Movements Monthly Reports</a>. There are also some other useful and interesting statistics at this link which I recommend for those interested in finding out more.
+	<br>
+	<br>
+	You have some display options below for chart color and chart size, please select your options and create chart. Please note, in order to display the chart you must run a python web server on your machine and launch the page by typing localhost:8000 in your web browser.
+	</h2>
+
+	
+	<!-- Drop down list added with 3 options, the options will be selected by the DOM and used as values to be passed in as height of rectangles -->
+	<!-- id has been added in order to allow the DOM select the values chosen -->
+	<select id="chartHeight">
+		<option value="300">300 Pixels</option>
+		<option value="500">500 Pixels</option>
+		<option value="800">800 Pixels</option>
+	</select>
+	
+	<!-- user will be asked to choose a color which will be used in the chart  -->
+	<!-- input type color give a color chart which the user can access and choose a color which will be selected by the DOM -->
+	<!-- id added to allow DOM selection -->
+	Choose Chart Color: <input type = "color" id="chooseColor">
+	
+	<!-- Button added which will call the create chart function and the chart will be drawn -->
+	<button onclick="createChart()">Create Chart</button>
+
+	<!-- Div element created, which will be used to append an SVG element to in the JavaScript code -->
+	<div id="myDiv"></div>
+</body>   <!-- closing body tag -->
+
+</html> 	<!-- closing html tag -->
+
+<script> <!-- opening JavaScript tag -->
+// I will create a bar chart in D3 using the data in the csv file as input and DOM queries will be used to apply user selections to the chart
+
+// a function has been created which will be executed on an event when the user clicks the create chart button on the webpage
+// Note the closing curly brace for the function is after the last line of code
+function createChart() {
+	// the data is read in from the csv file and output to the console, can check by opening inspector when webpage is launched
+	d3.csv("births.csv").then(function(data) {
+		console.log(data);
+		
+	// Here I have converted the values in the births colum in the csv from the default string type to number type
+	// The purpose of this is to have them used to calculate the max data for the Y scale later
+	data.forEach(function(d) {
+		d.births = Number(d.births);
+	})
+
+	// Variables added below which will be passed into the attributes for the rectangles
+	// height and color variables access some user input through the DOM and style the bar chart accordingly
+	// the barcount variable has been set to the length of the data set or number of rows of data
+	// the gap variable is the space between each rectangle in the bar chart and I have set the value to 10 pixels
+	// I have set the overall width of the chart to 600 pixels
+	var height = document.getElementById("chartHeight").value;
+	var width = 600;
+	var barcount = data.length;
+	var gap = 10;
+	var chooseColor = document.getElementById("chooseColor").value;
+
+	// I have created a Y scale with the range heigth set equal to the height variable coded above
+	// the height value for the domain has been set equal to the largest value in the births column of the csv file 
+	// d3.max is a function in D3 that reads in the largest data point from the csv file
+	var yScale = d3.scaleLinear()
+		.domain([0, d3.max(data, function(d) {
+			return d.births;
+		})])
+		.range([height, 0]);
+
+	// I have created an X scale which reads in the data from the month column in the csv file 
+	// data.map is a D3 function that reads in the data in the csv file, width has been set equal to the width variable 
+	var xScale = d3.scaleBand()
+		.domain(data.map(function (d) {
+			return d.Month;
+		}))
+		.range([0, width]);
+		
+	// I have created a Y axis using the Y scale created above as scale
+	var yAxis = d3.axisLeft()
+		.scale(yScale)
+		
+	// I have created an X axis using the X scale created above as scale
+	var xAxis = d3.axisBottom()
+		.scale(xScale);
+	
+	// Charts previously appended to the SVG will be removed before the code runs to append the new new chart to the SVG
+	// Without this line the previously drawn chart would remain on the page even when a new chart is drawn by the user
+	d3.select("#myDiv").selectAll("*").remove();
+
+	// SVG container appended to the div HTML element with a width of 800 pixels and a height of 1000 pixels
+	var svgContainer = d3.select("#myDiv").append("svg")
+		.attr("width", 800)
+		.attr("height", 1000);
+
+	// I have associated the data in the csv file with the SVG container 
+	var myRectangle = svgContainer.selectAll("rect")
+		.data(data);
+		
+	// I will now add attributes to the rectangles which will be created 
+	// D3 enter method loops through each row of data in the csv file, a rectangle will be created for each value in the csv file
+	// x attribute will be calculated by dividing overall width by the number of rows of data both of which are variables
+	// y attribute has been set as a Y scale value of the data in the csv file
+	// width is also calculated by dividing overall width by number of rows of data and subtracting the space between rectangles
+	// The height is set by subtracting the y scale values from the csv file from the height variable, this is what makes the bars travel up the page
+	// Color will be selected by the user and a DOM query will access the users selection and return the color in the chart created
+	myRectangle.enter()
+		.append("rect")
+				.attr("x", function(d, i) {
+				return 50 + (i * width/barcount);
+				})
+				.attr("y", function(d) {
+					return yScale(d.births);
+				})
+				.attr("width", (width/barcount - gap))
+				.attr("height", function(d) {
+					return height - yScale(d.births);
+				})
+				.attr("fill", chooseColor);	
+		
+	// I have appended the y axis to the svg container 		
+	svgContainer.append("g")
+		.attr("transform", "translate(45,0)")
+		.call(yAxis);
+		
+	// I have appended the x axis to the svg container 	
+	svgContainer.append("g")
+		.attr("transform", "translate (50," + height + ")")
+		.call(xAxis);
+});
+}	// closing curly brace of the createChart() function
+</script> <!-- closing script tag -->
